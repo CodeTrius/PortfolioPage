@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Nome - Efeito de Digitação</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
+        body {
+            background-color: #222;
+            color: #eee;
+            font-family: 'Source Code Pro', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+        }
+        .typing-effect {
+            font-size: 2.5rem;
+            border-right: 2px solid #eee;
+            white-space: nowrap;
+            overflow: hidden;
+            margin: 0 auto;
+            display: inline-block;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+        h1 {
+            font-size: 4rem;
+            color: #00ff99;
+            margin: 0;
+        }
+        p {
+            font-size: 1.2rem;
+            margin: 20px 0 40px;
+        }
+        .links a {
+            color: #00ff99;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.2rem;
+            transition: text-shadow 0.3s;
+        }
+        .links a:hover {
+            text-shadow: 0 0 10px #00ff99;
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #eee }
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .typing-effect { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Seu Nome</h1>
+        <p class="typing-container">
+            Eu sou <span id="typing" class="typing-effect"></span>
+        </p>
+        <div class="links">
+            <a href="#">Projetos</a>
+            <a href="#">Sobre</a>
+            <a href="#">Contato</a>
+        </div>
+    </div>
+
+    <script>
+        const typingElement = document.getElementById('typing');
+        const words = ["Desenvolvedor Web.", "Engenheiro de Software.", "UI/UX Designer.", "Entusiasta de IA."];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            const currentText = isDeleting 
+                ? currentWord.substring(0, charIndex - 1)
+                : currentWord.substring(0, charIndex + 1);
+
+            typingElement.textContent = currentText;
+            typingElement.style.width = typingElement.offsetWidth + 'px'; // Fix width for stability
+
+            if (!isDeleting && charIndex < currentWord.length) {
+                charIndex++;
+                setTimeout(type, 150);
+            } else if (isDeleting && charIndex > 0) {
+                charIndex--;
+                setTimeout(type, 100);
+            } else {
+                isDeleting = !isDeleting;
+                if (!isDeleting) {
+                    wordIndex = (wordIndex + 1) % words.length;
+                }
+                setTimeout(type, isDeleting ? 1500 : 500);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', type);
+    </script>
+</body>
+</html>
